@@ -1,0 +1,20 @@
+{
+  "name": "Addons.io addon service demo",
+  "logo": "https://addons.io/logo.svg",
+  "repository": "https://github.com/addonsio/addon-service-demo",
+  "addons": [],
+  "env": {
+    "ADDON_SERVICE_SLUG": {
+      "description": "Addon service slug"
+    },
+    "ADDON_SERVICE_PASSWORD": {
+      "description": "Addon service password"
+    },
+    "ADDON_SERVICE_OAUTH_CLIENT_SECRET": {
+      "description": "Addon service OAuth credentials client secret"
+    },
+    "ADDON_SERVICE_SSO_SALT": {
+      "description": "Addon service Single sign-on salt"
+    }
+  }
+}

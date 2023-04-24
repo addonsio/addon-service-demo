@@ -1,0 +1,52 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addons-api (1.0.8)
+      oj (~> 3.14)
+      rest-client (~> 2.1)
+    domain_name (0.5.20190701)
+      unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.8.1)
+    http-accept (1.7.0)
+    http-cookie (1.0.5)
+      domain_name (~> 0.5)
+    mime-types (3.4.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2023.0218.1)
+    mustermann (3.0.0)
+      ruby2_keywords (~> 0.0.1)
+    netrc (0.11.0)
+    nio4r (2.5.9)
+    oj (3.14.3)
+    puma (6.2.2)
+      nio4r (~> 2.0)
+    rack (2.2.6.4)
+    rack-protection (3.0.6)
+      rack
+    rest-client (2.1.0)
+      http-accept (>= 1.7.0, < 2.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
+    ruby2_keywords (0.0.5)
+    sinatra (3.0.6)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.0.6)
+      tilt (~> 2.0)
+    tilt (2.1.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.8.2)
+
+PLATFORMS
+  x86_64-darwin-22
+
+DEPENDENCIES
+  addons-api (~> 1.0)
+  dotenv (~> 2.8)
+  puma (~> 6.2)
+  sinatra
+
+BUNDLED WITH
+   2.4.3
