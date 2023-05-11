@@ -25,6 +25,8 @@ set :password, ENV['ADDON_SERVICE_PASSWORD']
 set :oauth_client_secret, ENV['ADDON_SERVICE_CLIENT_SECRET']
 set :sso_salt, ENV['ADDON_SERVICE_SSO_SALT']
 
+set :default_content_type, :json
+
 # If provisioning takes more than 30 seconds, use the asynchronous provisioning pattern
 asynchronous_provisioning = false
 
@@ -195,6 +197,8 @@ end
 # SSO
 #
 post '/addonsio/sso' do
+  content_type :html
+
   # SSO endpoint is not protected by Addons.io API authentication
   begin
     # Verify the SSO request
@@ -221,7 +225,7 @@ post '/addonsio/sso' do
     session[:user_email] = params['user_email']
 
     # Redirect to the dashboard
-  redirect to('/dashboard'), 302
+    redirect to('/dashboard'), 302
     return
 
   rescue NotFoundError => e
@@ -246,6 +250,8 @@ end
 
 # Dashboard
 get '/dashboard' do
+  content_type :html
+
   # You should validate the user's session here.
   # Return a 200 OK response with some dashboard content.
   if session[:user_email]
