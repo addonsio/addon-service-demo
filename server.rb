@@ -28,10 +28,10 @@ set :sso_salt, ENV['ADDON_SERVICE_SSO_SALT']
 set :default_content_type, :json
 
 # If provisioning takes more than 30 seconds, use the asynchronous provisioning pattern
-asynchronous_provisioning = false
+asynchronous_provisioning = (ENV.fetch('ADDON_SERVICE_ASYNC_PROVISIONING') { false }) == 'true'
 
 # Set the port to listen on. $PORT will override it.
-set :port, 9292
+set :port, ENV.fetch('PORT') { 9292 }
 
 # Enable sessions for the sake of this demo
 enable :sessions
@@ -87,6 +87,8 @@ post '/addonsio/resources' do
       })
 
       # Return a 202 Accepted response
+      # In this case you will have to callback to Addons.io when provisioning is complete,
+      # usually by using a background job.
       status 202
       return
     else
@@ -95,6 +97,7 @@ post '/addonsio/resources' do
         # In this example, use the uuid provided by Addons.io. You can use your own id if you prefer.
         id: payload['uuid'], 
         message: "Wooohoo! Your add-on is all set up and ready to be used!",
+        # Provide the config vars and log drain url
         config: {
           "API_KEY": SecureRandom.uuid,
           "URL": "https://#{SecureRandom.hex}:#{SecureRandom.hex}@#{settings.slug}.com",
