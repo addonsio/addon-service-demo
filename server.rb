@@ -24,6 +24,7 @@ set :slug, ENV['ADDON_SERVICE_SLUG']
 set :password, ENV['ADDON_SERVICE_PASSWORD']
 set :oauth_client_secret, ENV['ADDON_SERVICE_CLIENT_SECRET']
 set :sso_salt, ENV['ADDON_SERVICE_SSO_SALT']
+set :logger, Logger.new(STDOUT)
 
 set :default_content_type, :json
 
@@ -63,12 +64,16 @@ post '/addonsio/resources' do
     # ...
     
     # Exchange OAuth grant for an access token
+    token = nil
     if settings.oauth_client_secret && payload['oauth_grant']
-      client = AddonsApi::Client.connect
+      client = AddonsApi::Client.connect({
+        base_url: 'http://localhost:5100',
+      })
 
       token = client.oauth.token.create({
         secret: settings.oauth_client_secret
       }, payload['oauth_grant']['code'])
+
       # Do something with the token, like updating configuration variables
       # or following asynchronous provisioning
     end
@@ -85,6 +90,23 @@ post '/addonsio/resources' do
         id: payload['uuid'], 
         message: "Your add-on is being provisioned. It will be available shortly.",
       })
+
+      Thread.new { 
+        sleep 2
+        # Callback to Addons.io when provisioning is complete
+
+        if token
+          client = AddonsApi::Client.connect_with_token(token[:access_token], {
+            base_url: 'http://localhost:5100',
+          })
+
+          client.team.addon.action.provision_with_callback_url(payload['callback_url'])
+
+          logger.info("Set as provisioned.")
+        else
+          logger.info("No token. Skipping.")
+        end
+      }
 
       # Return a 202 Accepted response
       # In this case you will have to callback to Addons.io when provisioning is complete,
